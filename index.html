@@ -12,7 +12,6 @@ font-family: Arial, sans-serif;
 margin:0;
 color:white;
 
-/* Fundo com imagem de Bleach */
 background:
 linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
 url("https://images6.alphacoders.com/303/303200.jpg");
@@ -104,9 +103,9 @@ background:#ff0000;
 
 <div class="card">
 
-<h2>Adicionar Matéria</h2>
+<h2>Matérias da Mochila</h2>
 
-<input id="materiaInput" placeholder="Digite a matéria">
+<input id="materiaInput" placeholder="Adicionar nova matéria">
 
 <button onclick="addMateria()">Adicionar</button>
 
@@ -135,9 +134,24 @@ background:#ff0000;
 
 <script>
 
+/* matérias padrão */
+let materiasPadrao = [
+"História",
+"Matemática",
+"Português",
+"Geografia",
+"Física",
+"Química"
+]
+
 function carregarMaterias(){
 
-let materias = JSON.parse(localStorage.getItem("materias")) || []
+let materias = JSON.parse(localStorage.getItem("materias"))
+
+if(!materias){
+materias = materiasPadrao
+localStorage.setItem("materias", JSON.stringify(materias))
+}
 
 let lista = document.getElementById("listaMaterias")
 
