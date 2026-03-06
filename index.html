@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mochila Escolar</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+background: linear-gradient(135deg,#0a0a0a,#1c1c1c);
+color:white;
+margin:0;
+}
+
+header{
+background:linear-gradient(90deg,#ff6a00,#ff0000);
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:#1e1e1e;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+box-shadow:0 0 15px rgba(255,90,0,0.5);
+}
+
+input,button,textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:5px;
+}
+
+button{
+background:#ff6a00;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#ff3c00;
+}
+
+.materia{
+background:#333;
+padding:8px;
+margin-top:10px;
+border-radius:5px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.apagar{
+background:red;
+border:none;
+width:25px;
+height:25px;
+border-radius:4px;
+color:white;
+cursor:pointer;
+font-size:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.apagar:hover{
+background:#ff0000;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🎒 Mochila Escolar
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Adicionar Matéria</h2>
+
+<input id="materiaInput" placeholder="Digite a matéria">
+
+<button onclick="addMateria()">Adicionar</button>
+
+<div id="listaMaterias"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Perguntas sobre Escola</h2>
+
+<p>Qual sua matéria favorita?</p>
+<textarea></textarea>
+
+<p>Qual matéria você acha mais difícil?</p>
+<textarea></textarea>
+
+<p>Você prefere estudar sozinho ou em grupo?</p>
+<textarea></textarea>
+
+<button onclick="alert('Resposta enviada!')">Enviar respostas</button>
+
+</div>
+
+</div>
+
+<script>
+
+function carregarMaterias(){
+
+let materias = JSON.parse(localStorage.getItem("materias")) || []
+
+let lista = document.getElementById("listaMaterias")
+
+lista.innerHTML=""
+
+materias.forEach((m,index)=>{
+
+let div = document.createElement("div")
+div.className="materia"
+
+let texto = document.createElement("span")
+texto.innerText=m
+
+let btn = document.createElement("button")
+btn.innerText="✖"
+btn.className="apagar"
+
+btn.onclick=function(){
+removerMateria(index)
+}
+
+div.appendChild(texto)
+div.appendChild(btn)
+
+lista.appendChild(div)
+
+})
+
+}
+
+function addMateria(){
+
+let input = document.getElementById("materiaInput")
+
+if(input.value.trim()=="") return
+
+let materias = JSON.parse(localStorage.getItem("materias")) || []
+
+materias.push(input.value)
+
+localStorage.setItem("materias",JSON.stringify(materias))
+
+input.value=""
+
+carregarMaterias()
+
+}
+
+function removerMateria(index){
+
+let materias = JSON.parse(localStorage.getItem("materias")) || []
+
+materias.splice(index,1)
+
+localStorage.setItem("materias",JSON.stringify(materias))
+
+carregarMaterias()
+
+}
+
+carregarMaterias()
+
+</script>
+
+</body>
+</html>
