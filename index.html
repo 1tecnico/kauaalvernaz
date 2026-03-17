@@ -70,6 +70,11 @@ border-radius:5px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+cursor:pointer;
+}
+
+.materia span{
+flex:1;
 }
 
 .apagar{
@@ -88,6 +93,10 @@ justify-content:center;
 
 .apagar:hover{
 background:#ff0000;
+}
+
+#caderno{
+display:none;
 }
 
 </style>
@@ -113,26 +122,21 @@ background:#ff0000;
 
 </div>
 
-<div class="card">
+<div class="card" id="caderno">
 
-<h2>Perguntas sobre Escola</h2>
+<h2 id="tituloMateria">Caderno</h2>
 
-<p>Qual sua matéria favorita?</p>
-<textarea></textarea>
+<textarea id="anotacao" rows="10" placeholder="Escreva aqui o que você estudou..."></textarea>
 
-<p>Qual matéria você acha mais difícil?</p>
-<textarea></textarea>
-
-<p>Você prefere estudar sozinho ou em grupo?</p>
-<textarea></textarea>
-
-<button onclick="alert('Resposta enviada!')">Enviar respostas</button>
+<button onclick="salvarAnotacao()">Salvar Anotação</button>
 
 </div>
 
 </div>
 
 <script>
+
+let materiaAtual = null
 
 /* matérias padrão */
 let materiasPadrao = [
@@ -165,11 +169,17 @@ div.className="materia"
 let texto = document.createElement("span")
 texto.innerText=m
 
+// clicar na matéria abre o caderno
+texto.onclick=function(){
+abrirCaderno(m)
+}
+
 let btn = document.createElement("button")
 btn.innerText="✖"
 btn.className="apagar"
 
-btn.onclick=function(){
+btn.onclick=function(e){
+e.stopPropagation()
 removerMateria(index)
 }
 
@@ -209,6 +219,33 @@ materias.splice(index,1)
 localStorage.setItem("materias",JSON.stringify(materias))
 
 carregarMaterias()
+
+}
+
+// 🔥 abrir caderno
+function abrirCaderno(nome){
+
+materiaAtual = nome
+
+document.getElementById("caderno").style.display="block"
+document.getElementById("tituloMateria").innerText="📘 " + nome
+
+let anotacaoSalva = localStorage.getItem("anotacao_"+nome)
+
+document.getElementById("anotacao").value = anotacaoSalva || ""
+
+}
+
+// 💾 salvar anotação
+function salvarAnotacao(){
+
+if(!materiaAtual) return
+
+let texto = document.getElementById("anotacao").value
+
+localStorage.setItem("anotacao_"+materiaAtual, texto)
+
+alert("Anotação salva!")
 
 }
 
