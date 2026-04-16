@@ -19,6 +19,7 @@ background-size:cover;
 background-position:center;
 }
 
+/* HEADER */
 header{
 background:linear-gradient(90deg,#00c3ff,#0072ff);
 padding:20px;
@@ -27,12 +28,24 @@ font-size:26px;
 font-weight:bold;
 }
 
+/* IMAGEM */
+.imagem-dh{
+width:100%;
+max-height:400px;
+object-fit:cover;
+display:block;
+margin:0 auto;
+border-bottom:4px solid #0072ff;
+}
+
+/* CONTAINER */
 .container{
 padding:20px;
 max-width:900px;
 margin:auto;
 }
 
+/* CARD */
 .card{
 background:rgba(30,30,30,0.9);
 padding:20px;
@@ -40,6 +53,7 @@ border-radius:10px;
 margin-bottom:20px;
 }
 
+/* BOTÕES */
 button{
 padding:10px;
 border:none;
@@ -50,6 +64,7 @@ cursor:pointer;
 margin-top:10px;
 }
 
+/* TEXTAREA */
 textarea{
 width:100%;
 padding:10px;
@@ -58,6 +73,7 @@ border-radius:5px;
 border:none;
 }
 
+/* COMENTÁRIOS */
 .comentario{
 background:#222;
 padding:10px;
@@ -75,8 +91,12 @@ border-radius:5px;
 <button onclick="voltar()">⬅ Voltar</button>
 </header>
 
+<!-- IMAGEM -->
+<img src="https://images6.alphacoders.com/303/303200.jpg" class="imagem-dh">
+
 <div class="container">
 
+<!-- TEXTO -->
 <div class="card">
 <h2>O que são Direitos Humanos?</h2>
 
@@ -92,9 +112,9 @@ independentemente de sua origem, raça, religião ou condição social.
 <li>Igualdade perante a lei</li>
 <li>Proteção contra discriminação</li>
 </ul>
-
 </div>
 
+<!-- COMENTÁRIOS -->
 <div class="card">
 <h2>💬 Comentários</h2>
 
@@ -103,19 +123,18 @@ independentemente de sua origem, raça, religião ou condição social.
 <button onclick="addComentario()">Comentar</button>
 
 <div id="listaComentarios"></div>
-
 </div>
 
 </div>
 
 <script>
 
+/* VOLTAR */
 function voltar(){
 window.location.href = "index.html"
 }
 
-/* COMENTÁRIOS */
-
+/* CARREGAR COMENTÁRIOS */
 function carregarComentarios(){
 let comentarios = JSON.parse(localStorage.getItem("comentarios")) || []
 
@@ -130,6 +149,7 @@ lista.appendChild(div)
 })
 }
 
+/* ADICIONAR COMENTÁRIO */
 function addComentario(){
 
 let input = document.getElementById("comentarioInput")
@@ -148,6 +168,7 @@ input.value=""
 carregarComentarios()
 }
 
+/* INICIAR */
 carregarComentarios()
 
 </script>
