@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mochila Escolar</title>
+<title>Direitos Humanos</title>
 
 <style>
 body{
@@ -12,19 +12,18 @@ margin:0;
 color:white;
 
 background:
-linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
 url("https://images6.alphacoders.com/303/303200.jpg");
 
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 }
 
 header{
-background:linear-gradient(90deg,#ff6a00,#ff0000);
+background:linear-gradient(90deg,#00c3ff,#0072ff);
 padding:20px;
 text-align:center;
-font-size:28px;
+font-size:26px;
 font-weight:bold;
 }
 
@@ -39,72 +38,31 @@ background:rgba(30,30,30,0.9);
 padding:20px;
 border-radius:10px;
 margin-bottom:20px;
-box-shadow:0 0 15px rgba(255,90,0,0.5);
-}
-
-input,button,textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:5px;
 }
 
 button{
-background:#ff6a00;
+padding:10px;
+border:none;
+border-radius:5px;
+background:#0072ff;
 color:white;
-font-weight:bold;
 cursor:pointer;
+margin-top:10px;
 }
 
-button:hover{
-background:#ff3c00;
-}
-
-.materia{
-background:#333;
-padding:8px;
+textarea{
+width:100%;
+padding:10px;
 margin-top:10px;
 border-radius:5px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-cursor:pointer;
-}
-
-.materia span{
-flex:1;
-}
-
-.apagar{
-background:red;
 border:none;
-width:25px;
-height:25px;
-border-radius:4px;
-color:white;
-cursor:pointer;
-font-size:12px;
-display:flex;
-align-items:center;
-justify-content:center;
 }
 
-.apagar:hover{
-background:#ff0000;
-}
-
-#caderno{
-display:none;
-}
-
-.actions{
-display:flex;
-gap:10px;
-}
-
-.actions button{
-flex:1;
+.comentario{
+background:#222;
+padding:10px;
+margin-top:10px;
+border-radius:5px;
 }
 </style>
 </head>
@@ -112,33 +70,39 @@ flex:1;
 <body>
 
 <header>
-🎒 Mochila Escolar
+🌍 Direitos Humanos
+<br><br>
+<button onclick="voltar()">⬅ Voltar</button>
 </header>
 
 <div class="container">
 
 <div class="card">
+<h2>O que são Direitos Humanos?</h2>
 
-<h2>Matérias da Mochila</h2>
+<p>
+Direitos humanos são direitos fundamentais garantidos a todas as pessoas,
+independentemente de sua origem, raça, religião ou condição social.
+</p>
 
-<input id="materiaInput" placeholder="Adicionar nova matéria (pressione Enter)">
+<ul>
+<li>Direito à vida</li>
+<li>Liberdade de expressão</li>
+<li>Direito à educação</li>
+<li>Igualdade perante a lei</li>
+<li>Proteção contra discriminação</li>
+</ul>
 
-<div class="actions">
-<button onclick="addMateria()">Adicionar</button>
-<button onclick="limparMaterias()">Limpar Tudo</button>
 </div>
 
-<div id="listaMaterias"></div>
+<div class="card">
+<h2>💬 Comentários</h2>
 
-</div>
+<textarea id="comentarioInput" placeholder="Escreva sua opinião..."></textarea>
 
-<div class="card" id="caderno">
+<button onclick="addComentario()">Comentar</button>
 
-<h2 id="tituloMateria">Caderno</h2>
-
-<textarea id="anotacao" rows="10" placeholder="Escreva aqui o que você estudou..."></textarea>
-
-<button onclick="salvarAnotacao()">Salvar Anotação</button>
+<div id="listaComentarios"></div>
 
 </div>
 
@@ -146,141 +110,45 @@ flex:1;
 
 <script>
 
-let materiaAtual = null
-
-let materiasPadrao = [
-"História",
-"Matemática",
-"Português",
-"Geografia",
-"Física",
-"Química"
-]
-
-// ENTER para adicionar
-document.getElementById("materiaInput").addEventListener("keypress", function(e){
-if(e.key === "Enter"){
-addMateria()
-}
-})
-
-function carregarMaterias(){
-
-let materias = JSON.parse(localStorage.getItem("materias"))
-
-if(!materias){
-materias = materiasPadrao
-localStorage.setItem("materias", JSON.stringify(materias))
+function voltar(){
+window.location.href = "index.html"
 }
 
-let lista = document.getElementById("listaMaterias")
+/* COMENTÁRIOS */
+
+function carregarComentarios(){
+let comentarios = JSON.parse(localStorage.getItem("comentarios")) || []
+
+let lista = document.getElementById("listaComentarios")
 lista.innerHTML=""
 
-materias.forEach((m,index)=>{
-
+comentarios.forEach(c=>{
 let div = document.createElement("div")
-div.className="materia"
-
-let texto = document.createElement("span")
-texto.innerText=m
-
-texto.onclick=function(){
-abrirCaderno(m)
-}
-
-let btn = document.createElement("button")
-btn.innerText="✖"
-btn.className="apagar"
-
-btn.onclick=function(e){
-e.stopPropagation()
-removerMateria(index)
-}
-
-div.appendChild(texto)
-div.appendChild(btn)
+div.className="comentario"
+div.innerText = c
 lista.appendChild(div)
-
 })
 }
 
-function addMateria(){
+function addComentario(){
 
-let input = document.getElementById("materiaInput")
-let nome = input.value.trim()
+let input = document.getElementById("comentarioInput")
+let texto = input.value.trim()
 
-if(nome === ""){
-alert("Digite uma matéria!")
-return
-}
+if(texto==="") return
 
-let materias = JSON.parse(localStorage.getItem("materias")) || []
+let comentarios = JSON.parse(localStorage.getItem("comentarios")) || []
 
-// evitar duplicadas
-if(materias.includes(nome)){
-alert("Essa matéria já existe!")
-return
-}
+comentarios.push(texto)
 
-materias.push(nome)
-
-localStorage.setItem("materias",JSON.stringify(materias))
+localStorage.setItem("comentarios", JSON.stringify(comentarios))
 
 input.value=""
 
-carregarMaterias()
-
+carregarComentarios()
 }
 
-function removerMateria(index){
-
-let materias = JSON.parse(localStorage.getItem("materias")) || []
-
-materias.splice(index,1)
-
-localStorage.setItem("materias",JSON.stringify(materias))
-
-carregarMaterias()
-
-}
-
-function limparMaterias(){
-
-if(confirm("Tem certeza que deseja apagar todas as matérias?")){
-localStorage.removeItem("materias")
-localStorage.clear()
-carregarMaterias()
-document.getElementById("caderno").style.display="none"
-}
-
-}
-
-function abrirCaderno(nome){
-
-materiaAtual = nome
-
-document.getElementById("caderno").style.display="block"
-document.getElementById("tituloMateria").innerText="📘 " + nome
-
-let anotacaoSalva = localStorage.getItem("anotacao_"+nome)
-
-document.getElementById("anotacao").value = anotacaoSalva || ""
-
-}
-
-function salvarAnotacao(){
-
-if(!materiaAtual) return
-
-let texto = document.getElementById("anotacao").value
-
-localStorage.setItem("anotacao_"+materiaAtual, texto)
-
-alert("Anotação salva!")
-
-}
-
-carregarMaterias()
+carregarComentarios()
 
 </script>
 
