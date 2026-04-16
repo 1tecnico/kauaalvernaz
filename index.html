@@ -6,7 +6,6 @@
 <title>Mochila Escolar</title>
 
 <style>
-
 body{
 font-family: Arial, sans-serif;
 margin:0;
@@ -99,6 +98,14 @@ background:#ff0000;
 display:none;
 }
 
+.actions{
+display:flex;
+gap:10px;
+}
+
+.actions button{
+flex:1;
+}
 </style>
 </head>
 
@@ -114,9 +121,12 @@ display:none;
 
 <h2>Matérias da Mochila</h2>
 
-<input id="materiaInput" placeholder="Adicionar nova matéria">
+<input id="materiaInput" placeholder="Adicionar nova matéria (pressione Enter)">
 
+<div class="actions">
 <button onclick="addMateria()">Adicionar</button>
+<button onclick="limparMaterias()">Limpar Tudo</button>
+</div>
 
 <div id="listaMaterias"></div>
 
@@ -138,7 +148,6 @@ display:none;
 
 let materiaAtual = null
 
-/* matérias padrão */
 let materiasPadrao = [
 "História",
 "Matemática",
@@ -147,6 +156,13 @@ let materiasPadrao = [
 "Física",
 "Química"
 ]
+
+// ENTER para adicionar
+document.getElementById("materiaInput").addEventListener("keypress", function(e){
+if(e.key === "Enter"){
+addMateria()
+}
+})
 
 function carregarMaterias(){
 
@@ -158,7 +174,6 @@ localStorage.setItem("materias", JSON.stringify(materias))
 }
 
 let lista = document.getElementById("listaMaterias")
-
 lista.innerHTML=""
 
 materias.forEach((m,index)=>{
@@ -169,7 +184,6 @@ div.className="materia"
 let texto = document.createElement("span")
 texto.innerText=m
 
-// clicar na matéria abre o caderno
 texto.onclick=function(){
 abrirCaderno(m)
 }
@@ -185,22 +199,30 @@ removerMateria(index)
 
 div.appendChild(texto)
 div.appendChild(btn)
-
 lista.appendChild(div)
 
 })
-
 }
 
 function addMateria(){
 
 let input = document.getElementById("materiaInput")
+let nome = input.value.trim()
 
-if(input.value.trim()=="") return
+if(nome === ""){
+alert("Digite uma matéria!")
+return
+}
 
 let materias = JSON.parse(localStorage.getItem("materias")) || []
 
-materias.push(input.value)
+// evitar duplicadas
+if(materias.includes(nome)){
+alert("Essa matéria já existe!")
+return
+}
+
+materias.push(nome)
 
 localStorage.setItem("materias",JSON.stringify(materias))
 
@@ -222,7 +244,17 @@ carregarMaterias()
 
 }
 
-// 🔥 abrir caderno
+function limparMaterias(){
+
+if(confirm("Tem certeza que deseja apagar todas as matérias?")){
+localStorage.removeItem("materias")
+localStorage.clear()
+carregarMaterias()
+document.getElementById("caderno").style.display="none"
+}
+
+}
+
 function abrirCaderno(nome){
 
 materiaAtual = nome
@@ -236,7 +268,6 @@ document.getElementById("anotacao").value = anotacaoSalva || ""
 
 }
 
-// 💾 salvar anotação
 function salvarAnotacao(){
 
 if(!materiaAtual) return
